@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="navbar">
+    <h1>Welcome to Smart Dashboard</h1>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <div class="dashboard-content">
+    <h2>Search Feature</h2>
+    <input type="text" placeholder="Search something..." class="search-box">
+    <button class="search-btn">Search</button>
+  </div>
+
+  <script>
+    // Redirect if not logged in
+    if (!localStorage.getItem("loggedIn")) {
+      window.location.href = "login.html";
+    }
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
