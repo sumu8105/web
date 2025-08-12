@@ -1,29 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SmartSearch — Dashboard</title>
+
+  <!-- Tesseract (OCR) -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <!-- TensorFlow.js & coco-ssd (object detection) -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2/dist/coco-ssd.min.js"></script>
+
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <div class="navbar">
-    <h1>Welcome to Smart Dashboard</h1>
-    <button class="logout-btn" onclick="logout()">Logout</button>
+<body onload="checkLoginAndInit()">
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <div class="logo-xl">🔍</div>
+        <h2>SmartSearch</h2>
+      </div>
+      <nav class="nav">
+        <a class="nav-item active">Dashboard</a>
+        <a class="nav-item" onclick="document.getElementById('imageInput').click()">Image Search</a>
+        <a class="nav-item" onclick="showHistory()">Search History</a>
+        <a class="nav-item" onclick="settings()">Settings</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="user-info">
+          <div class="avatar">👤</div>
+          <div>
+            <div id="sidebar-user" class="user-name"></div>
+            <div class="muted user-small" id="sidebar-email"></div>
+          </div>
+        </div>
+        <button class="btn ghost" onclick="logout()">Logout</button>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="search-row">
+          <input id="globalSearch" type="text" placeholder="Type a query or upload an image to search..." />
+          <div class="search-actions">
+            <button class="btn" onclick="triggerVoice()">🎤</button>
+            <button class="btn" onclick="document.getElementById('imageInput').click()">🖼 Upload</button>
+            <button class="btn primary" onclick="doSearch()">Search</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="cards">
+          <div class="card">
+            <h3>Quick Search</h3>
+            <p>Type keywords and press <strong>Search</strong> or use image upload below.</p>
+          </div>
+
+          <div class="card">
+            <h3>Image Recognition</h3>
+            <p>Upload an image — OCR is tried first; if no useful text is found, object detection runs as fallback.</p>
+            <input id="imageInput" type="file" accept="image/*" style="display:none" onchange="handleImage(event)">
+            <img id="preview" class="preview" alt="" style="display:none" />
+            <div id="image-status" class="muted user-small" style="margin-top:8px"></div>
+          </div>
+
+          <div class="card stat">
+            <h3>Search History</h3>
+            <ul id="historyList" class="history"></ul>
+          </div>
+        </section>
+
+        <section class="results card">
+          <div class="results-header">
+            <h3>Results</h3>
+            <div id="results-query" class="muted"></div>
+          </div>
+          <div id="results" class="results-body">
+            <p class="muted">No search yet — results will show here.</p>
+          </div>
+        </section>
+      </div>
+    </div>
   </div>
 
-  <div class="dashboard-content">
-    <h2>Search Feature</h2>
-    <input type="text" placeholder="Search something..." class="search-box">
-    <button class="search-btn">Search</button>
-  </div>
-
-  <script>
-    // Redirect if not logged in
-    if (!localStorage.getItem("loggedIn")) {
-      window.location.href = "login.html";
-    }
-  </script>
   <script src="script.js"></script>
 </body>
 </html>
